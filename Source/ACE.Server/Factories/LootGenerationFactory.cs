@@ -85,7 +85,7 @@ namespace ACE.Server.Factories
             var itemChance = ThreadSafeRandom.Next(1, 100);
             if (itemChance <= profile.ItemChance)
             {
-                numItems = ThreadSafeRandom.Next(profile.ItemMinAmount, profile.ItemMaxAmount);
+                numItems = RandomNumberOfItems(profile.ItemMinAmount, profile.ItemMaxAmount, 1, 3);
 
                 for (var i = 0; i < numItems; i++)
                 {
@@ -102,7 +102,7 @@ namespace ACE.Server.Factories
             itemChance = ThreadSafeRandom.Next(1, 100);
             if (itemChance <= profile.MagicItemChance)
             {
-                numItems = ThreadSafeRandom.Next(profile.MagicItemMinAmount, profile.MagicItemMaxAmount);
+                numItems = RandomNumberOfItems(profile.MagicItemMinAmount, profile.MagicItemMaxAmount, 5, 10);
 
                 for (var i = 0; i < numItems; i++)
                 {
@@ -132,7 +132,7 @@ namespace ACE.Server.Factories
                     }
                 }
 
-                numItems = ThreadSafeRandom.Next(profile.MundaneItemMinAmount, profile.MundaneItemMaxAmount);
+                numItems = RandomNumberOfItems(profile.MundaneItemMinAmount, profile.MundaneItemMaxAmount, 1, 1);
 
                 for (var i = 0; i < numItems; i++)
                 {
@@ -147,6 +147,11 @@ namespace ACE.Server.Factories
             }
 
             return loot;
+        }
+
+        public static int RandomNumberOfItems(int min, int max, int minMultiplier, int maxMultiplier)
+        {
+            return ThreadSafeRandom.Next(min * minMultiplier, max * maxMultiplier);
         }
 
         /// <summary>
@@ -194,7 +199,7 @@ namespace ACE.Server.Factories
         {
             WorldObject wo;
 
-            // Adjusting rolls for changing drop rates for clothing - HarliQ 11/11/19 
+            // Adjusting rolls for changing drop rates for clothing - HarliQ 11/11/19
 
             var type = lootBias switch
             {
@@ -902,7 +907,7 @@ namespace ACE.Server.Factories
                     break;
             }
 
-            return damageMod + 1;   
+            return damageMod + 1;
         }
 
         public static double GetManaRate(WorldObject wo)
@@ -1732,7 +1737,7 @@ namespace ACE.Server.Factories
         }
 
         /// <summary>
-        /// Sets a randomized default material type for when a weenie does not have TsysMutationData 
+        /// Sets a randomized default material type for when a weenie does not have TsysMutationData
         /// </summary>
         /// <param name="wo"></param>
         /// <returns></returns>
@@ -1917,7 +1922,7 @@ namespace ACE.Server.Factories
             if (ThreadSafeRandom.Next(1, 4) > 1)
             {
                 // 1% chance for 1 Epic, 0.1% chance for 2 Epics,
-                // 0.01% chance for 3 Epics, 0.001% chance for 4 Epics 
+                // 0.01% chance for 3 Epics, 0.001% chance for 4 Epics
                 if (ThreadSafeRandom.Next(1, (int)(100 * dropRateMod * lootQualityMod)) == 1)
                     numEpics = 1;
                 if (ThreadSafeRandom.Next(1, (int)(1000 * dropRateMod * lootQualityMod)) == 1)
@@ -2283,7 +2288,7 @@ namespace ACE.Server.Factories
                     else
                         meleeMod = 0.09;
                     break;
-                case 330: // Casters    
+                case 330: // Casters
                 case 315: // Missile
                 case 335: // Missile
                     if (chance < 10)
@@ -2345,5 +2350,5 @@ namespace ACE.Server.Factories
             meleeMod += 1.0;
             return meleeMod;
         }
-    }         
+    }
 }
